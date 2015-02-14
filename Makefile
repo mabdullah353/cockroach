@@ -27,8 +27,6 @@ STATIC := $(STATIC)
 
 RUN  := run
 GOPATH  := $(CURDIR)/../../../..:$(CURDIR)/_vendor
-# Exposes protoc.
-PATH := $(CURDIR)/_vendor/usr/bin:$(PATH)
 
 PKG        := "./..."
 TESTS      := ".*"

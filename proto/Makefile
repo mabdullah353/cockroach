@@ -16,18 +16,19 @@
 # Author: Spencer Kimball (spencer.kimball@gmail.com)
 # Author: Andrew Bonventre (andybons@gmail.com)
 
-PROTOS      := api.proto config.proto data.proto errors.proto gossip.proto heartbeat.proto internal.proto
+PROTOC      := $(shell git rev-parse --show-cdup)_vendor/usr/bin/protoc
+PROTOS      := $(wildcard *.proto)
 PROTO_GO    := $(PROTOS:.proto=.pb.go)
 GOGO_PROTOS := ../../../../github.com/gogo/protobuf/gogoproto/gogo.proto
 SOURCES     := $(PROTOS:.proto=.pb.cc) github.com/gogo/protobuf/gogoproto/gogo.pb.cc
 HEADERS     := $(PROTOS:.proto=.pb.h) github.com/gogo/protobuf/gogoproto/gogo.pb.h
 
-PROTO_PATH := ../../../../:../../../../github.com/gogo/protobuf/protobuf:../../../../github.com/gogo/protobuf/gogoproto
+PROTO_PATH := ../../../../:../../../../github.com/gogo/protobuf/protobuf
 PROTOC_GEN_GOGO :=../../../../../bin/protoc-gen-gogo
 
 all:
-	protoc --plugin=protoc-gen-gogo=$(PROTOC_GEN_GOGO) --gogo_out=. --cpp_out=../storage/engine --proto_path=.:$(PROTO_PATH) $(PROTOS)
-	protoc --cpp_out=../storage/engine --proto_path=$(PROTO_PATH) $(GOGO_PROTOS)
+	$(PROTOC) --plugin=protoc-gen-gogo=$(PROTOC_GEN_GOGO) --gogo_out=. --cpp_out=../storage/engine --proto_path=.:$(PROTO_PATH) $(PROTOS)
+	$(PROTOC) --cpp_out=../storage/engine --proto_path=$(PROTO_PATH) $(GOGO_PROTOS)
 	ln -sf github.com/gogo/protobuf/gogoproto/gogo.pb.cc ../storage/engine/gogo.pb.cc
 
 clean:
