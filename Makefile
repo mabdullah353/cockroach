@@ -28,6 +28,12 @@ STATIC := $(STATIC)
 RUN  := run
 GOPATH  := $(CURDIR)/../../../..:$(CURDIR)/_vendor
 
+# TODO(pmattis): Figure out where to clear the CGO_* variables when
+# building "release" binaries.
+export CGO_CFLAGS :=-g
+export CGO_CXXFLAGS :=-g
+export CGO_LDFLAGS :=-g
+
 PKG        := "./..."
 TESTS      := ".*"
 TESTFLAGS  := -logtostderr -timeout 10s
