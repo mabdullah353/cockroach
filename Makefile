@@ -95,7 +95,8 @@ acceptance:
 	  ./local-cluster.sh stop)
 
 clean:
-	$(GO) clean
+	cd _vendor/src/github.com/coreos/etcd/raft ; $(GO) clean -i -r ./...
+	$(GO) clean -i -r ./...
 	find . -name '*.test' -type f -exec rm -f {} \;
 	rm -f storage/engine/engine.pc
 
