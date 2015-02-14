@@ -36,16 +36,6 @@ TESTFLAGS  := -logtostderr -timeout 10s
 RACEFLAGS  := -logtostderr -timeout 1m
 BENCHFLAGS := -logtostderr -timeout 5m
 
-OS := $(shell uname -s)
-
-ifeq ($(OS),Darwin)
-LDEXTRA += -lc++
-endif
-
-ifeq ($(OS),Linux)
-LDEXTRA += -lrt
-endif
-
 ifeq ($(STATIC),1)
 GOFLAGS  += -a -tags netgo -ldflags '-extldflags "-lm -lstdc++ -static"'
 endif
@@ -59,7 +49,7 @@ build: auxiliary
 	$(GO) build $(GOFLAGS) -o cockroach
 
 storage/engine/engine.pc: storage/engine/engine.pc.in
-	sed -e "s,@PWD@,$(CURDIR),g" -e "s,@LDEXTRA@,$(LDEXTRA),g" < $^ > $@
+	sed -e "s,@PWD@,$(CURDIR),g" < $^ > $@
 
 test: auxiliary
 	$(GO) test $(GOFLAGS) -run $(TESTS) $(PKG) $(TESTFLAGS)
